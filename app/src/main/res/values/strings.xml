@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">WhacAMole</string>
+    <string name="_0">0</string>
+    <string name="streak">Streak:</string>
+    <string name="points">Points:</string>
+    <string name="textview9">TextView</string>
+    <string name="textview8">TextView</string>
+    <string name="todo">TODO</string>
+    <string name="button">Button</string>
+    <string name="highest_score">Highest Score</string>
+    <string name="highest_streak">Highest Streak</string>
+    <string name="textview3">TextView</string>
+</resources>
