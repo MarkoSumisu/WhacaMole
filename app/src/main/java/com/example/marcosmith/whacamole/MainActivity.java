@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SoundPool sp;
     private AudioAttributes AA;
     private int mInterval = 5000; // 5 seconds by default, can be changed later
-    private int moleQuickness;
+    private int molespeed;
     private Handler mHandler;
     private static int SPLASH_TIME_OUT = 10;
 
@@ -251,15 +251,15 @@ public void noMole(final int holenumber) {
                 }
             }
             molespawned = false;
-            moleQuickness = 1000 - (streak * 5);
-            if (moleQuickness < 100){
-                moleQuickness = 100;
+            molespeed = 1000 - (streak * 5);
+            if (molespeed < 100){
+                molespeed = 100;
             }else {
-                moleQuickness = 1000 - (streak * 5);
+                molespeed = 1000 - (streak * 5);
             }
             //moleAppear1 = false; moleAppear2 = false; moleAppear3 = false; moleAppear4 = false; moleAppear5 = false;
         }
-    }, moleQuickness);
+    }, molespeed);
 
 }
 
