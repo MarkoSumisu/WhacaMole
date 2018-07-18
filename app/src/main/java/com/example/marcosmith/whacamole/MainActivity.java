@@ -21,6 +21,10 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     public static int points = 0;
     public static int streak = 0;
+
+    public static int savepoint = 0;
+    public static int savestreak = 0;
+
     private SoundPool sp;
     private AudioAttributes AA;
     private int mInterval = 5000; // 5 seconds by default, can be changed later
@@ -33,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public int missMole;
     public int streakfail;
 
+    public static String stringStreakSaved;
+    public static String stringPointsSaved;
+
     private ImageButton hole1, hole2, hole3, hole4, hole5;
     private TextView pointCounter;
     private TextView streakCounter;
@@ -43,13 +50,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Handler handler;
     private MediaPlayer mPlayer;
 
-    public SharedPreferences load;
+    public static SharedPreferences load;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        load = getSharedPreferences(stringPointsSaved, 0);
+        String mString = load.getString("HighScore", "0");
+
+        load = getSharedPreferences(stringStreakSaved, 0);
+        String mString2 = load.getString("HighStreak", "0");
+
+        stringStreakSaved = mString2;
+        stringPointsSaved = mString;
+
+        savepoint = savepoint + Integer.parseInt(mString);
+        savestreak = savestreak + Integer.parseInt(mString2);
+
         Log.d("logtag", "Second Activity booted");
         loadSounds();
         setButtons();
@@ -143,6 +163,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         points = points + ptns;
         pointCounter = findViewById(R.id.textView5);
         pointCounter.setText(String.valueOf(points));
+        if (streak>savestreak){
+            stringStreakSaved = String.valueOf(streak);
+            SharedPreferences.Editor savestreak = load.edit();
+            savestreak.putString("HighStreak", stringStreakSaved).apply();
+            Log.d("logtag", "High Score Beaten! Streak Stats Saved!");
+        }
+        if (points > savepoint){
+            stringPointsSaved = String.valueOf(points);
+            SharedPreferences.Editor save = load.edit();
+            save.putString("HighScore", stringPointsSaved).apply();
+            Log.d("logtag", "High Score Beaten! Point Stats Saved!");
+        }
     }
 
 public void testhole() {
@@ -339,13 +371,24 @@ public void noMole(final int holenumber) {
     @Override
     protected void onDestroy() {
         super.onDestroy();{
+            Log.d("logtag", "App Closed!");
+            Log.d("logtag", stringPointsSaved);
             stopRepeatingTask();
             sp.release();
             sp = null;
             mPlayer.release();
-            SharedPreferences.Editor save = load.edit();
-            save.putString("HighScore", String.valueOf(points)).apply();
-            Log.d("logtag", "Stats Saved!");
+            if (streak>savestreak){
+                stringStreakSaved = String.valueOf(streak);
+                SharedPreferences.Editor savestreak = load.edit();
+                savestreak.putString("HighStreak", stringStreakSaved).apply();
+                Log.d("logtag", "High Score Beaten! Streak Stats Saved!");
+            }
+            if (points > savepoint){
+                stringPointsSaved = String.valueOf(points);
+                SharedPreferences.Editor save = load.edit();
+                save.putString("HighScore", stringPointsSaved).apply();
+                Log.d("logtag", "High Score Beaten! Point Stats Saved!");
+            }
         }
     }
 

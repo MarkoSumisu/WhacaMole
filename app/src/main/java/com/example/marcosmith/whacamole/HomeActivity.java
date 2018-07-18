@@ -17,13 +17,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public static int highScore = MainActivity.points;
     public static int highstreak = MainActivity.streak;
 
-    private final String SCORE_KEY = "scorekey";
-    private final String STREAK_KEY = "streakkey";
+    private String testsave = MainActivity.stringPointsSaved;
+    private String testsave2 = MainActivity.stringStreakSaved;
 
-    public static String pointsString;
-    public String testsave = "yo";
-
-    //public SharedPreferences loadpoints = MainActivity.load;
+    public SharedPreferences loadpoints = MainActivity.load;
 
 
 
@@ -33,11 +30,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-/*        loadpoints = getSharedPreferences(pointsString, 0);
-        String mString = loadpoints.getString("HighScore", "0");*/
+        loadpoints = getSharedPreferences(testsave, 0);
+        String mString = loadpoints.getString("HighScore", "0");
 
-/*        scoreNumber = findViewById(R.id.textView11);
-        scoreNumber.setText(mString);*/
+        loadpoints = getSharedPreferences(testsave2, 0);
+        String mString2 = loadpoints.getString("HighStreak", "0");
+
+       // Log.d("logtag", mString);
+
+        scoreNumber = findViewById(R.id.textView12);
+        scoreNumber.setText(mString);
+
+        streakNumber = findViewById(R.id.textView11);
+        streakNumber.setText(mString2);
+
         Log.d("logtag", "Main Activity booted");
     }
 

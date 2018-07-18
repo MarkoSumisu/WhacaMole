@@ -10,4 +10,6 @@
     <string name="highest_score">Highest Score</string>
     <string name="highest_streak">Highest Streak</string>
     <string name="textview3">TextView</string>
+    <string name="whac_a_mole">WHAC - A - MOLE</string>
+    <string name="play">PLAY!</string>
 </resources>
