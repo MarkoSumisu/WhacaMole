@@ -2,7 +2,7 @@ package com.example.marcosmith.whacamole;
 
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -18,14 +19,13 @@ import android.widget.TextView;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    private int points = 0;
-    private int streak = 0;
+    public static int points = 0;
+    public static int streak = 0;
     private SoundPool sp;
     private AudioAttributes AA;
     private int mInterval = 5000; // 5 seconds by default, can be changed later
     private int molespeed;
     private Handler mHandler;
-    private static int SPLASH_TIME_OUT = 10;
 
     //sound variables//
     public int moleWhack;
@@ -43,20 +43,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Handler handler;
     private MediaPlayer mPlayer;
 
+    public SharedPreferences load;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //new Handler().postDelayed(new Runnable() {
-            //@Override
-            //public void run() {
-                Intent homeIntent = new Intent(MainActivity.this,HomeActivity.class);
-                startActivity(homeIntent);
-                //finish();
-           // }
-        //}, SPLASH_TIME_OUT);
+        Log.d("logtag", "Second Activity booted");
         loadSounds();
         setButtons();
         mHandler = new Handler();
@@ -349,6 +343,9 @@ public void noMole(final int holenumber) {
             sp.release();
             sp = null;
             mPlayer.release();
+            SharedPreferences.Editor save = load.edit();
+            save.putString("HighScore", String.valueOf(points)).apply();
+            Log.d("logtag", "Stats Saved!");
         }
     }
 
