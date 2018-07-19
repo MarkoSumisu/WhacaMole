@@ -2,6 +2,7 @@ package com.example.marcosmith.whacamole;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static String stringStreakSaved;
     public static String stringPointsSaved;
 
-    private ImageButton hole1, hole2, hole3, hole4, hole5;
+    private ImageButton hole1, hole2, hole3, hole4, hole5, returnbutton;
     private TextView pointCounter;
     private TextView streakCounter;
     private boolean lastMoleWhacked = false;
@@ -100,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.molehole1) {
-           //Log.d("logtag", String.valueOf(moleAppear1));
             if (moleAppear1){
                 playSounds(1);
                 givePoints(1);
@@ -149,6 +149,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 playSounds(2);
             }
 
+        } else if (id == R.id.imageButton){
+            Log.d("logtag", String.valueOf(savepoint));
+            if (streak>savestreak){
+                stringStreakSaved = String.valueOf(streak);
+                SharedPreferences.Editor savestreak = load.edit();
+                savestreak.putString("HighStreak", stringStreakSaved).apply();
+                Log.d("logtag", "High Score Beaten! Streak Stats Saved!");
+            }
+            if (points > savepoint){
+                stringPointsSaved = String.valueOf(points);
+                SharedPreferences.Editor save = load.edit();
+                save.putString("HighScore", stringPointsSaved).apply();
+                Log.d("logtag", "High Score Beaten! Point Stats Saved!");
+            }
+            Intent homeIntent = new Intent(MainActivity.this,HomeActivity.class);
+            startActivity(homeIntent);
+            finish();
+            Log.d("logtag", "Back to Title screen");
         }
 
     }
@@ -178,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 public void testhole() {
-    //moleAppear1 = false; moleAppear2 = false; moleAppear3= false; moleAppear4 = false; moleAppear5 = false;
     Random rnd = new Random();
     chooseHole = rnd.nextInt(5);
     if (chooseHole == 0 && !molespawned){
@@ -283,7 +300,6 @@ public void noMole(final int holenumber) {
             }else {
                 molespeed = 1000 - (streak * 5);
             }
-            //moleAppear1 = false; moleAppear2 = false; moleAppear3 = false; moleAppear4 = false; moleAppear5 = false;
         }
     }, molespeed);
 
@@ -304,6 +320,9 @@ public void noMole(final int holenumber) {
 
         hole5 = findViewById(R.id.molehole5);
         hole5.setOnClickListener(this);
+
+        returnbutton = findViewById(R.id.imageButton);
+        returnbutton.setOnClickListener(this);
     }
 
     public void loadSounds(){
@@ -325,7 +344,6 @@ public void noMole(final int holenumber) {
         missMole = sp.load(this, R.raw.mole_swing,1);
         moleHere = sp.load(this, R.raw.mole_boop,1);
         streakfail = sp.load(this, R.raw.streak_ended,1);
-        //backgroundMusic = sp.load(this, R.raw.bg_music,1);
 
         playSounds(4);
     }
