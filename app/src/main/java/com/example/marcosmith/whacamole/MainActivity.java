@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public static int savepoint = 0;
     public static int savestreak = 0;
 
+    public static int debounce = 0;
+
     private SoundPool sp;
     private AudioAttributes AA;
     private int mInterval = 5000;
@@ -39,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public int missMole;
     public int streakfail;
 
-    public static String stringStreakSaved;
-    public static String stringPointsSaved;
+    public static String stringStreakSaved = "0";
+    public static String stringPointsSaved = "0";
 
     private ImageButton hole1, hole2, hole3, hole4, hole5, returnbutton;
     private TextView pointCounter;
@@ -60,10 +62,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        load = getSharedPreferences(stringPointsSaved, 0);
+        debounce = 0;
+        points = 0;
+        streak = 0;
+        savepoint = 0;
+        savestreak = 0;
+
+        load = getSharedPreferences("userdata", 0);
         String mString = load.getString("HighScore", "0");
 
-        load = getSharedPreferences(stringStreakSaved, 0);
+        load = getSharedPreferences("userdata", 0);
         String mString2 = load.getString("HighStreak", "0");
 
         stringStreakSaved = mString2;
@@ -71,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         savepoint = savepoint + Integer.parseInt(mString);
         savestreak = savestreak + Integer.parseInt(mString2);
+
+        Log.d("logtag", "MainActivity onCreate: " + stringPointsSaved);
 
         loadSounds();
         setButtons();
@@ -149,26 +159,24 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             }
 
         } else if (id == R.id.imageButton){
-            Log.d("logtag", String.valueOf(savepoint));
-            if (streak>savestreak){
-                stringStreakSaved = String.valueOf(streak);
-                SharedPreferences.Editor savestreak = load.edit();
-                savestreak.putString("HighStreak", stringStreakSaved).apply();
+            if (debounce == 0) {
+                debounce = 1;
+                Log.d("logtag", "if ID is imagebutton: " + stringPointsSaved);
+
+                if (streak>savestreak){
+                    stringStreakSaved = String.valueOf(streak);
+                    SharedPreferences.Editor savestreak = load.edit();
+                    savestreak.putString("HighStreak", stringStreakSaved).apply();
+                }
+                if (points > savepoint){
+                    stringPointsSaved = String.valueOf(points);
+                    SharedPreferences.Editor save = load.edit();
+                    save.putString("HighScore", stringPointsSaved).apply();
+                }
+                Intent homeIntent = new Intent(MainActivity.this,HomeActivity.class);
+                startActivity(homeIntent);
+                finish();
             }
-            if (points > savepoint){
-                stringPointsSaved = String.valueOf(points);
-                SharedPreferences.Editor save = load.edit();
-                save.putString("HighScore", stringPointsSaved).apply();
-            }
-            Intent homeIntent = new Intent(MainActivity.this,HomeActivity.class);
-            startActivity(homeIntent);
-            finish();
-            TextView streakNumber = findViewById(R.id.textView11);
-            streakNumber.setText(String.valueOf(savestreak));
-            TextView scoreNumber = findViewById(R.id.textView12);
-            scoreNumber.setText(String.valueOf(savepoint));
-            points = 0;
-            streak = 0;
         }
 
         return false;

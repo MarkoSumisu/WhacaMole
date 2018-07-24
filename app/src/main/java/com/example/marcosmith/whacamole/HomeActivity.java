@@ -28,17 +28,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         highScore = MainActivity.savepoint;
         highstreak = MainActivity.savestreak;
 
-        loadpoints = getSharedPreferences(testsave, 0);
-        String mString = loadpoints.getString("HighScore", String.valueOf(highScore));
+        loadpoints = getSharedPreferences("userdata", 0);
 
+        String mString = loadpoints.getString("HighScore", "No Data!");
         scoreNumber = findViewById(R.id.textView12);
         scoreNumber.setText(mString);
 
-        loadpoints = getSharedPreferences(testsave2, 0);
-        String mString2 = loadpoints.getString("HighStreak", String.valueOf(highstreak));
-
+        String mString2 = loadpoints.getString("HighStreak", "No Data!");
         streakNumber = findViewById(R.id.textView11);
         streakNumber.setText(mString2);
+
+        Log.d("logtag", "HomeActivity onCreate: " + mString);
     }
 
     @Override
