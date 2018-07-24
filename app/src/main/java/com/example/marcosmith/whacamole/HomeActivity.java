@@ -28,24 +28,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         highScore = MainActivity.savepoint;
         highstreak = MainActivity.savestreak;
 
-        //if (Integer.parseInt(testsave) >= highScore){
+        loadpoints = getSharedPreferences(testsave, 0);
+        String mString = loadpoints.getString("HighScore", String.valueOf(highScore));
 
-            loadpoints = getSharedPreferences(testsave, 0);
-            String mString = loadpoints.getString("HighScore", String.valueOf(highScore));
+        scoreNumber = findViewById(R.id.textView12);
+        scoreNumber.setText(mString);
 
-            scoreNumber = findViewById(R.id.textView12);
-            scoreNumber.setText(mString);
-       // }
+        loadpoints = getSharedPreferences(testsave2, 0);
+        String mString2 = loadpoints.getString("HighStreak", String.valueOf(highstreak));
 
-        //if (Integer.parseInt(testsave2) >= highstreak){
-            loadpoints = getSharedPreferences(testsave2, 0);
-            String mString2 = loadpoints.getString("HighStreak", String.valueOf(highstreak));
-
-            streakNumber = findViewById(R.id.textView11);
-            streakNumber.setText(mString2);
-        //}
-
-        Log.d("logtag", "Home Activity booted");
+        streakNumber = findViewById(R.id.textView11);
+        streakNumber.setText(mString2);
     }
 
     @Override
@@ -55,7 +48,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             Intent homeIntent = new Intent(HomeActivity.this,MainActivity.class);
             startActivity(homeIntent);
             finish();
-            Log.d("logtag", "Main Activity fired");
         }
     }
 

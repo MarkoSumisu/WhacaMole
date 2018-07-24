@@ -13,13 +13,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener{
     public static int points = 0;
     public static int streak = 0;
 
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private SoundPool sp;
     private AudioAttributes AA;
-    private int mInterval = 5000; // 5 seconds by default, can be changed later
+    private int mInterval = 5000;
     private int molespeed;
     private Handler mHandler;
 
@@ -71,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         savepoint = savepoint + Integer.parseInt(mString);
         savestreak = savestreak + Integer.parseInt(mString2);
 
-        Log.d("logtag", "Second Activity booted");
         loadSounds();
         setButtons();
         mHandler = new Handler();
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View view) {
+    public boolean onTouch(View view, MotionEvent boop) {
         int id = view.getId();
         if (id == R.id.molehole1) {
             if (moleAppear1){
@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 hole1.setImageResource(R.drawable.hole);
             }else if (!moleAppear1) {
                 playSounds(2);
-                //Log.d("logtag", "sound fired");
             }
         } else if (id == R.id.molehole2) {
             if (moleAppear2){
@@ -155,20 +154,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 stringStreakSaved = String.valueOf(streak);
                 SharedPreferences.Editor savestreak = load.edit();
                 savestreak.putString("HighStreak", stringStreakSaved).apply();
-                Log.d("logtag", "High Score Beaten! Streak Stats Saved!");
             }
             if (points > savepoint){
                 stringPointsSaved = String.valueOf(points);
                 SharedPreferences.Editor save = load.edit();
                 save.putString("HighScore", stringPointsSaved).apply();
-                Log.d("logtag", "High Score Beaten! Point Stats Saved!");
             }
             Intent homeIntent = new Intent(MainActivity.this,HomeActivity.class);
             startActivity(homeIntent);
             finish();
-            Log.d("logtag", "Back to Title screen");
+            TextView streakNumber = findViewById(R.id.textView11);
+            streakNumber.setText(String.valueOf(savestreak));
+            TextView scoreNumber = findViewById(R.id.textView12);
+            scoreNumber.setText(String.valueOf(savepoint));
+            points = 0;
+            streak = 0;
         }
 
+        return false;
     }
 
     @SuppressLint("SetTextI18n")
@@ -185,13 +188,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             stringStreakSaved = String.valueOf(streak);
             SharedPreferences.Editor savestreak = load.edit();
             savestreak.putString("HighStreak", stringStreakSaved).apply();
-            Log.d("logtag", "High Score Beaten! Streak Stats Saved!");
         }
         if (points > savepoint){
             stringPointsSaved = String.valueOf(points);
             SharedPreferences.Editor save = load.edit();
             save.putString("HighScore", stringPointsSaved).apply();
-            Log.d("logtag", "High Score Beaten! Point Stats Saved!");
         }
     }
 
@@ -307,22 +308,22 @@ public void noMole(final int holenumber) {
 
     public void setButtons(){
         hole1 = findViewById(R.id.molehole1);
-        hole1.setOnClickListener(this);
+        hole1.setOnTouchListener(this);
 
         hole2 = findViewById(R.id.molehole2);
-        hole2.setOnClickListener(this);
+        hole2.setOnTouchListener(this);
 
         hole3 = findViewById(R.id.molehole3);
-        hole3.setOnClickListener(this);
+        hole3.setOnTouchListener(this);
 
         hole4 = findViewById(R.id.molehole4);
-        hole4.setOnClickListener(this);
+        hole4.setOnTouchListener(this);
 
         hole5 = findViewById(R.id.molehole5);
-        hole5.setOnClickListener(this);
+        hole5.setOnTouchListener(this);
 
         returnbutton = findViewById(R.id.imageButton);
-        returnbutton.setOnClickListener(this);
+        returnbutton.setOnTouchListener(this);
     }
 
     public void loadSounds(){
@@ -389,8 +390,6 @@ public void noMole(final int holenumber) {
     @Override
     protected void onDestroy() {
         super.onDestroy();{
-            Log.d("logtag", "App Closed!");
-            Log.d("logtag", stringPointsSaved);
             stopRepeatingTask();
             sp.release();
             sp = null;
@@ -399,13 +398,11 @@ public void noMole(final int holenumber) {
                 stringStreakSaved = String.valueOf(streak);
                 SharedPreferences.Editor savestreak = load.edit();
                 savestreak.putString("HighStreak", stringStreakSaved).apply();
-                Log.d("logtag", "High Score Beaten! Streak Stats Saved!");
             }
             if (points > savepoint){
                 stringPointsSaved = String.valueOf(points);
                 SharedPreferences.Editor save = load.edit();
                 save.putString("HighScore", stringPointsSaved).apply();
-                Log.d("logtag", "High Score Beaten! Point Stats Saved!");
             }
         }
     }
