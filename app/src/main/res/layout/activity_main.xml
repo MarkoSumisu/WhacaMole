@@ -8,6 +8,25 @@
     tools:context=".MainActivity">
 
     <ImageButton
+        android:id="@+id/pausebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="false"
+        android:backgroundTint="#cda700"
+        android:contentDescription="@string/todo2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@android:drawable/ic_media_pause" />
+
+    <ImageButton
         android:id="@+id/molehole2"
         android:layout_width="85dp"
         android:layout_height="85dp"
@@ -201,14 +220,32 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:adjustViewBounds="false"
-        android:backgroundTint="@android:color/holo_red_dark"
+        android:backgroundTint="#045301"
+        android:contentDescription="@string/todo2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.025"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@android:drawable/ic_menu_revert"
-        android:contentDescription="@string/todo2" />
+        app:srcCompat="@android:drawable/ic_menu_revert" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/paused"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:color/background_light"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

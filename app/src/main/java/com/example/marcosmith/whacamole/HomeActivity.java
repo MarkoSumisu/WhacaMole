@@ -30,11 +30,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         loadpoints = getSharedPreferences("userdata", 0);
 
-        String mString = loadpoints.getString("HighScore", "No Data!");
+        String mString = loadpoints.getString("HighScore", "0");
         scoreNumber = findViewById(R.id.textView12);
         scoreNumber.setText(mString);
 
-        String mString2 = loadpoints.getString("HighStreak", "No Data!");
+        String mString2 = loadpoints.getString("HighStreak", "0");
         streakNumber = findViewById(R.id.textView11);
         streakNumber.setText(mString2);
 
@@ -45,6 +45,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.button){
+            Log.d("logtag", "Game Launched");
             Intent homeIntent = new Intent(HomeActivity.this,MainActivity.class);
             startActivity(homeIntent);
             finish();

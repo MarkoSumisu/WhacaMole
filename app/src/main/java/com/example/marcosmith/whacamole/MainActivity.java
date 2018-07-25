@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public static int savestreak = 0;
 
     public static int debounce = 0;
+    public int backedout = 0;
 
     private SoundPool sp;
     private AudioAttributes AA;
@@ -44,15 +45,24 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public static String stringStreakSaved = "0";
     public static String stringPointsSaved = "0";
 
-    private ImageButton hole1, hole2, hole3, hole4, hole5, returnbutton;
+    private ImageButton hole1;
+    private ImageButton hole2;
+    private ImageButton hole3;
+    private ImageButton hole4;
+    private ImageButton hole5;
+    private ImageButton pausedbutton;
     private TextView pointCounter;
     private TextView streakCounter;
     private boolean lastMoleWhacked = false;
+    public int gamepaused;
     private boolean moleAppear1 = false, moleAppear2 = false, moleAppear3 = false, moleAppear4 = false, moleAppear5 = false;
     private boolean molespawned = false;
     private int chooseHole = 0;
     private Handler handler;
     private MediaPlayer mPlayer;
+    public Boolean soundIsPlaying;
+
+    private TextView pausething;
 
     public static SharedPreferences load;
 
@@ -61,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        pausething = findViewById(R.id.textView6);
 
         debounce = 0;
         points = 0;
@@ -178,9 +190,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 finish();
             }
         }
-
         return false;
     }
+
+
+
+
 
     @SuppressLint("SetTextI18n")
     public void givePoints(int ptns){
@@ -250,17 +265,19 @@ public void noMole(final int holenumber) {
                 moleAppear1 = false;
                 hole1.setImageResource(R.drawable.hole);
                 if (lastMoleWhacked) {
-                    streak = 0;
-                    lastMoleWhacked = false;
-                    streakCounter = findViewById(R.id.StreakValue);
-                    streakCounter.setText(String.valueOf(streak));
-                    playSounds(3);
-                    mInterval = 5000;
+                    if (gamepaused == 0) {
+                        streak = 0;
+                        lastMoleWhacked = false;
+                        streakCounter = findViewById(R.id.StreakValue);
+                        streakCounter.setText(String.valueOf(streak));
+                        playSounds(3);
+                        mInterval = 5000;
+                    }
                 }
             }else if (num == 2 && moleAppear2){
                 moleAppear2 = false;
                 hole2.setImageResource(R.drawable.hole);
-                if (lastMoleWhacked) {
+                if (gamepaused == 0) {
                     streak = 0;
                     lastMoleWhacked = false;
                     streakCounter = findViewById(R.id.StreakValue);
@@ -271,7 +288,7 @@ public void noMole(final int holenumber) {
             }else if (num == 3 && moleAppear3){
                 moleAppear3 = false;
                 hole3.setImageResource(R.drawable.hole);
-                if (lastMoleWhacked) {
+                if (gamepaused == 0) {
                     streak = 0;
                     lastMoleWhacked = false;
                     streakCounter = findViewById(R.id.StreakValue);
@@ -282,7 +299,7 @@ public void noMole(final int holenumber) {
             }else if (num == 4 && moleAppear4){
                 moleAppear4 = false;
                 hole4.setImageResource(R.drawable.hole);
-                if (lastMoleWhacked) {
+                if (gamepaused == 0) {
                     streak = 0;
                     lastMoleWhacked = false;
                     streakCounter = findViewById(R.id.StreakValue);
@@ -293,7 +310,7 @@ public void noMole(final int holenumber) {
             }else if (num == 5 && moleAppear5){
                 moleAppear5 = false;
                 hole5.setImageResource(R.drawable.hole);
-                if (lastMoleWhacked) {
+                if (gamepaused == 0) {
                     streak = 0;
                     lastMoleWhacked = false;
                     streakCounter = findViewById(R.id.StreakValue);
@@ -314,6 +331,7 @@ public void noMole(final int holenumber) {
 
 }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void setButtons(){
         hole1 = findViewById(R.id.molehole1);
         hole1.setOnTouchListener(this);
@@ -330,8 +348,28 @@ public void noMole(final int holenumber) {
         hole5 = findViewById(R.id.molehole5);
         hole5.setOnTouchListener(this);
 
-        returnbutton = findViewById(R.id.imageButton);
+        ImageButton returnbutton = findViewById(R.id.imageButton);
         returnbutton.setOnTouchListener(this);
+
+        pausedbutton = findViewById(R.id.pausebutton);
+        pausedbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (gamepaused == 0){
+                    gamepaused = 1;
+                    stopRepeatingTask();
+                    pausething.setVisibility(View.VISIBLE);
+                    pausedbutton.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_media_play, null));
+                    Log.d("logtag", "PAUSED!");
+                } else if (gamepaused == 1){
+                    gamepaused = 0;
+                    startRepeatingTask();
+                    pausething.setVisibility(View.INVISIBLE);
+                    pausedbutton.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_media_pause, null));
+                    Log.d("logtag", "UNPAUSED!");
+                }
+            }
+        });
     }
 
     public void loadSounds(){
@@ -376,6 +414,7 @@ public void noMole(final int holenumber) {
             mPlayer.setVolume(volume, volume);
             mPlayer.start();
             mPlayer.setLooping(true);
+            Log.d("logtag", "BG Music Started!");
         }
     }
 
@@ -383,16 +422,48 @@ public void noMole(final int holenumber) {
     protected void onPause() {
         super.onPause();{
             stopRepeatingTask();
-            mPlayer.pause();
+            if (debounce != 1 && backedout == 0){
+                mPlayer.pause();
+                gamepaused = 1;
+                pausething.setVisibility(View.VISIBLE);
+                pausedbutton.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_media_play, null));
+                Log.d("logtag", "PAUSED from onPause!");
+            }
         }
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();{
-            startRepeatingTask();
-            playSounds(4);
+    protected void onResume() {
+        super.onResume();{
+            //startRepeatingTask();
+            soundIsPlaying = mPlayer.isPlaying();
+            Log.d("logtag", String.valueOf(soundIsPlaying));
+            if(!soundIsPlaying){
+                playSounds(4);
+                Log.d("logtag", "Sound Played From onResume!");
+            }
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        backedout = 1;
+        Log.d("logtag", "Back button pressed : " + stringPointsSaved);
+        stopRepeatingTask();
+        if (streak>savestreak){
+            stringStreakSaved = String.valueOf(streak);
+            SharedPreferences.Editor savestreak = load.edit();
+            savestreak.putString("HighStreak", stringStreakSaved).apply();
+        }
+        if (points > savepoint){
+            stringPointsSaved = String.valueOf(points);
+            SharedPreferences.Editor save = load.edit();
+            save.putString("HighScore", stringPointsSaved).apply();
+        }
+        Intent homeIntent = new Intent(MainActivity.this,HomeActivity.class);
+        startActivity(homeIntent);
+        finish();
     }
 
     @Override
@@ -401,6 +472,7 @@ public void noMole(final int holenumber) {
             stopRepeatingTask();
             sp.release();
             sp = null;
+            mPlayer.stop();
             mPlayer.release();
             if (streak>savestreak){
                 stringStreakSaved = String.valueOf(streak);
