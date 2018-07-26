@@ -17,4 +17,10 @@
     <string name="buildversion">Build: 0.04</string>
     <string name="paused">PAUSED!</string>
     <string name="todo3">Life</string>
+    <string name="wintext">GAME OVER!</string>
+    <string name="endingStreak">Streak:</string>
+    <string name="endingScore">Score:</string>
+    <string name="returnscreen">Return To Title</string>
+    <string name="results">Final Results:</string>
+    <string name="endscreenmole">endmole</string>
 </resources>

@@ -15,8 +15,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public static int highScore;
     public static int highstreak;
 
-    private String testsave = MainActivity.stringPointsSaved;
-    private String testsave2 = MainActivity.stringStreakSaved;
+    //private String testsave = MainActivity.stringPointsSaved;
+    //private String testsave2 = MainActivity.stringStreakSaved;
 
     public SharedPreferences loadpoints = MainActivity.load;
 

@@ -19,7 +19,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.NumberFormat;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener{
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private SoundPool sp;
     private AudioAttributes AA;
-    private int mInterval = 5000;
+    private int mInterval = 3000;
     private int molespeed;
     private Handler mHandler;
 
@@ -308,6 +307,10 @@ public void UpdateLife(int health){
             heart1.setVisibility(View.INVISIBLE);
             heart2.setVisibility(View.INVISIBLE);
             heart3.setVisibility(View.INVISIBLE);
+
+            Intent homeIntent = new Intent(MainActivity.this,EndActivity.class);
+            startActivity(homeIntent);
+            finish();
         }
 }
 
@@ -334,7 +337,7 @@ public void noMole(final int holenumber) {
                                 UpdateLife(life);
                             }
                             if(life == 0){
-                                Log.d("logtag", "GAME OVER!");
+                                UpdateLife(life);
                             }
                         }
                     }
@@ -354,7 +357,7 @@ public void noMole(final int holenumber) {
                                 UpdateLife(life);
                             }
                             if(life == 0){
-                                Log.d("logtag", "GAME OVER!");
+                                UpdateLife(life);
                             }
                         }
                     }
@@ -374,7 +377,7 @@ public void noMole(final int holenumber) {
                                 UpdateLife(life);
                             }
                             if(life == 0){
-                                Log.d("logtag", "GAME OVER!");
+                                UpdateLife(life);
                             }
                         }
                     }
@@ -394,7 +397,7 @@ public void noMole(final int holenumber) {
                                 UpdateLife(life);
                             }
                             if(life == 0){
-                                Log.d("logtag", "GAME OVER!");
+                                UpdateLife(life);
                             }
                         }
                     }
@@ -414,7 +417,7 @@ public void noMole(final int holenumber) {
                                 UpdateLife(life);
                             }
                             if(life == 0){
-                                Log.d("logtag", "GAME OVER!");
+                                UpdateLife(life);
                             }
                         }
                     }
