@@ -435,7 +435,6 @@ public void noMole(final int holenumber) {
     @Override
     protected void onResume() {
         super.onResume();{
-            //startRepeatingTask();
             soundIsPlaying = mPlayer.isPlaying();
             Log.d("logtag", String.valueOf(soundIsPlaying));
             if(!soundIsPlaying){

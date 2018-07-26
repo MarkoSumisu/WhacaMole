@@ -16,4 +16,5 @@
     <string name="todo2">TODO2</string>
     <string name="buildversion">Build: 0.03</string>
     <string name="paused">PAUSED!</string>
+    <string name="todo3">Life</string>
 </resources>
