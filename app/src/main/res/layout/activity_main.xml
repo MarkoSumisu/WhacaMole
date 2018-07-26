@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/Life1"
-        android:layout_width="49dp"
+        android:layout_width="30dp"
         android:layout_height="56dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -21,8 +21,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.42"
-        app:srcCompat="@drawable/mole" />
+        app:layout_constraintVertical_bias="0.96"
+        app:srcCompat="@drawable/lifedisplay" />
 
     <ImageButton
         android:id="@+id/pausebutton"
@@ -267,7 +267,7 @@
 
     <ImageView
         android:id="@+id/Life2"
-        android:layout_width="49dp"
+        android:layout_width="30dp"
         android:layout_height="56dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -276,15 +276,15 @@
         android:contentDescription="@string/todo3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.11"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.529"
-        app:srcCompat="@drawable/mole" />
+        app:layout_constraintVertical_bias="0.96"
+        app:srcCompat="@drawable/lifedisplay" />
 
     <ImageView
         android:id="@+id/Life3"
-        android:layout_width="49dp"
+        android:layout_width="30dp"
         android:layout_height="56dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -293,10 +293,10 @@
         android:contentDescription="@string/todo3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.628"
-        app:srcCompat="@drawable/mole" />
+        app:layout_constraintVertical_bias="0.96"
+        app:srcCompat="@drawable/lifedisplay" />
 
 </android.support.constraint.ConstraintLayout>

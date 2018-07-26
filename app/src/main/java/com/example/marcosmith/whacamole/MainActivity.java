@@ -16,8 +16,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener{
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public static int savepoint = 0;
     public static int savestreak = 0;
+    public int life = 3;
 
     public static int debounce = 0;
     public int backedout = 0;
@@ -45,15 +48,19 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public static String stringStreakSaved = "0";
     public static String stringPointsSaved = "0";
 
+    public long last_mole;
+    public int result;
+
     private ImageButton hole1;
     private ImageButton hole2;
     private ImageButton hole3;
     private ImageButton hole4;
     private ImageButton hole5;
     private ImageButton pausedbutton;
+    private ImageView heart1, heart2, heart3;
     private TextView pointCounter;
     private TextView streakCounter;
-    private boolean lastMoleWhacked = false;
+    public boolean lastMoleWhacked = false;
     public int gamepaused;
     private boolean moleAppear1 = false, moleAppear2 = false, moleAppear3 = false, moleAppear4 = false, moleAppear5 = false;
     private boolean molespawned = false;
@@ -104,9 +111,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         public void run() {
             try {
-                testhole();
+                if (!molespawned){
+                    long runTime = System.currentTimeMillis();
+                    if(runTime >= (last_mole + mInterval)) { //multiply by 1000 to get milliseconds
+                        testhole();
+                        Log.d("logtag", "Mole Spawned!");
+                    }
+                }else if (molespawned){
+                    clearMoles();
+                    molespawned = false;
+                    Log.d("logtag", "Remove Mole!");
+                }
             } finally {
                 mHandler.postDelayed(mStatusChecker, mInterval);
+                noMole(1);
             }
         }
     };
@@ -122,80 +140,78 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public boolean onTouch(View view, MotionEvent boop) {
         int id = view.getId();
-        if (id == R.id.molehole1) {
-            if (moleAppear1){
-                playSounds(1);
-                givePoints(1);
-                moleAppear1 = false;
-                hole1.setImageResource(R.drawable.hole);
-            }else if (!moleAppear1) {
-                playSounds(2);
-            }
-        } else if (id == R.id.molehole2) {
-            if (moleAppear2){
-                playSounds(1);
-                givePoints(1);
-                moleAppear2 = false;
-                hole2.setImageResource(R.drawable.hole);
-            }else if(!moleAppear2) {
-                playSounds(2);
-            }
-        } else if (id == R.id.molehole3) {
-            if (moleAppear3){
-                playSounds(1);
-                givePoints(1);
-                moleAppear3 = false;
-                hole3.setImageResource(R.drawable.hole);
-            }else if (!moleAppear3){
-                playSounds(2);
-            }
-
-        } else if (id == R.id.molehole4){
-            if (moleAppear4){
-                playSounds(1);
-                givePoints(1);
-                moleAppear4 = false;
-                hole4.setImageResource(R.drawable.hole);
-            }else if (!moleAppear4){
-                playSounds(2);
-            }
-
-        } else if (id == R.id.molehole5){
-            if (moleAppear5){
-                playSounds(1);
-                givePoints(1);
-                moleAppear5 = false;
-                hole5.setImageResource(R.drawable.hole);
-            }else if (!moleAppear5){
-                playSounds(2);
-            }
-
-        } else if (id == R.id.imageButton){
-            if (debounce == 0) {
-                debounce = 1;
-                Log.d("logtag", "if ID is imagebutton: " + stringPointsSaved);
-
-                if (streak>savestreak){
-                    stringStreakSaved = String.valueOf(streak);
-                    SharedPreferences.Editor savestreak = load.edit();
-                    savestreak.putString("HighStreak", stringStreakSaved).apply();
+        if (boop.getAction() == MotionEvent.ACTION_DOWN){
+            if (id == R.id.molehole1) {
+                if (moleAppear1){
+                    playSounds(1);
+                    givePoints(1);
+                    moleAppear1 = false;
+                    hole1.setImageResource(R.drawable.hole);
+                }else if (!moleAppear1) {
+                    playSounds(2);
                 }
-                if (points > savepoint){
-                    stringPointsSaved = String.valueOf(points);
-                    SharedPreferences.Editor save = load.edit();
-                    save.putString("HighScore", stringPointsSaved).apply();
+            } else if (id == R.id.molehole2) {
+                if (moleAppear2){
+                    playSounds(1);
+                    givePoints(1);
+                    moleAppear2 = false;
+                    hole2.setImageResource(R.drawable.hole);
+                }else if(!moleAppear2) {
+                    playSounds(2);
                 }
-                Intent homeIntent = new Intent(MainActivity.this,HomeActivity.class);
-                startActivity(homeIntent);
-                finish();
+            } else if (id == R.id.molehole3) {
+                if (moleAppear3){
+                    playSounds(1);
+                    givePoints(1);
+                    moleAppear3 = false;
+                    hole3.setImageResource(R.drawable.hole);
+                }else if (!moleAppear3){
+                    playSounds(2);
+                }
+
+            } else if (id == R.id.molehole4){
+                if (moleAppear4){
+                    playSounds(1);
+                    givePoints(1);
+                    moleAppear4 = false;
+                    hole4.setImageResource(R.drawable.hole);
+                }else if (!moleAppear4){
+                    playSounds(2);
+                }
+
+            } else if (id == R.id.molehole5){
+                if (moleAppear5){
+                    playSounds(1);
+                    givePoints(1);
+                    moleAppear5 = false;
+                    hole5.setImageResource(R.drawable.hole);
+                }else if (!moleAppear5){
+                    playSounds(2);
+                }
+
+            } else if (id == R.id.imageButton){
+                if (debounce == 0) {
+                    debounce = 1;
+                    Log.d("logtag", "if ID is imagebutton: " + stringPointsSaved);
+
+                    if (streak>savestreak){
+                        stringStreakSaved = String.valueOf(streak);
+                        SharedPreferences.Editor savestreak = load.edit();
+                        savestreak.putString("HighStreak", stringStreakSaved).apply();
+                    }
+                    if (points > savepoint){
+                        stringPointsSaved = String.valueOf(points);
+                        SharedPreferences.Editor save = load.edit();
+                        save.putString("HighScore", stringPointsSaved).apply();
+                    }
+                    Intent homeIntent = new Intent(MainActivity.this,HomeActivity.class);
+                    startActivity(homeIntent);
+                    finish();
+                }
             }
         }
         return false;
     }
-
-
-
-
 
     @SuppressLint("SetTextI18n")
     public void givePoints(int ptns){
@@ -222,6 +238,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 public void testhole() {
     Random rnd = new Random();
     chooseHole = rnd.nextInt(5);
+    last_mole = System.currentTimeMillis();
+    Log.d("logtag", "Spawn Interval : " + mInterval);
     if (chooseHole == 0 && !molespawned){
         moleAppearSound();
         moleAppear1 = true;
@@ -253,78 +271,161 @@ public void testhole() {
         noMole(5);
         molespawned = true;
     }
+    //Log.d("logtag", "(Test Hole) Last Mole Hit: " + String.valueOf(lastMoleWhacked));
+}
+
+public void clearMoles(){
+    moleAppear1 = false;
+    hole1.setImageResource(R.drawable.hole);
+
+    moleAppear2 = false;
+    hole2.setImageResource(R.drawable.hole);
+
+    moleAppear3 = false;
+    hole3.setImageResource(R.drawable.hole);
+
+    moleAppear4 = false;
+    hole4.setImageResource(R.drawable.hole);
+
+    moleAppear5 = false;
+    hole5.setImageResource(R.drawable.hole);
+}
+
+public void UpdateLife(int health){
+        if (health == 3){
+            heart1.setVisibility(View.VISIBLE);
+            heart2.setVisibility(View.VISIBLE);
+            heart3.setVisibility(View.VISIBLE);
+        } else if (health == 2){
+            heart1.setVisibility(View.VISIBLE);
+            heart2.setVisibility(View.VISIBLE);
+            heart3.setVisibility(View.INVISIBLE);
+        } else if (health == 1){
+            heart1.setVisibility(View.VISIBLE);
+            heart2.setVisibility(View.INVISIBLE);
+            heart3.setVisibility(View.INVISIBLE);
+        } else if (health == 0){
+            heart1.setVisibility(View.INVISIBLE);
+            heart2.setVisibility(View.INVISIBLE);
+            heart3.setVisibility(View.INVISIBLE);
+        }
 }
 
 public void noMole(final int holenumber) {
+   // Log.d("logtag", "(No Mole) Last Mole Hit: " + String.valueOf(lastMoleWhacked));
     handler = new Handler();
     handler.postDelayed(new Runnable() {
         @SuppressLint("SetTextI18n")
         public void run() {
-            int num = holenumber;
-            if (num == 1 && moleAppear1){
-                moleAppear1 = false;
-                hole1.setImageResource(R.drawable.hole);
-                if (lastMoleWhacked) {
-                    if (gamepaused == 0) {
-                        streak = 0;
-                        lastMoleWhacked = false;
-                        streakCounter = findViewById(R.id.StreakValue);
-                        streakCounter.setText(String.valueOf(streak));
-                        playSounds(3);
-                        mInterval = 5000;
+            if (gamepaused == 0){
+                if (holenumber == 1 && moleAppear1){
+                    moleAppear1 = false;
+                    hole1.setImageResource(R.drawable.hole);
+                    if (lastMoleWhacked) {
+                        if (gamepaused == 0) {
+                            streak = 0;
+                            lastMoleWhacked = false;
+                            streakCounter = findViewById(R.id.StreakValue);
+                            streakCounter.setText(String.valueOf(streak));
+                            playSounds(3);
+                            mInterval = 5000;
+                            if(life > 0){
+                                life = life - 1;
+                                UpdateLife(life);
+                            }
+                            if(life == 0){
+                                Log.d("logtag", "GAME OVER!");
+                            }
+                        }
+                    }
+                }else if (holenumber == 2 && moleAppear2){
+                    moleAppear2 = false;
+                    hole2.setImageResource(R.drawable.hole);
+                    if (lastMoleWhacked) {
+                        if (gamepaused == 0) {
+                            streak = 0;
+                            lastMoleWhacked = false;
+                            streakCounter = findViewById(R.id.StreakValue);
+                            streakCounter.setText(String.valueOf(streak));
+                            playSounds(3);
+                            mInterval = 5000;
+                            if(life > 0){
+                                life = life - 1;
+                                UpdateLife(life);
+                            }
+                            if(life == 0){
+                                Log.d("logtag", "GAME OVER!");
+                            }
+                        }
+                    }
+                }else if (holenumber == 3 && moleAppear3){
+                    moleAppear3 = false;
+                    hole3.setImageResource(R.drawable.hole);
+                    if (lastMoleWhacked) {
+                        if (gamepaused == 0) {
+                            streak = 0;
+                            lastMoleWhacked = false;
+                            streakCounter = findViewById(R.id.StreakValue);
+                            streakCounter.setText(String.valueOf(streak));
+                            playSounds(3);
+                            mInterval = 5000;
+                            if(life > 0){
+                                life = life - 1;
+                                UpdateLife(life);
+                            }
+                            if(life == 0){
+                                Log.d("logtag", "GAME OVER!");
+                            }
+                        }
+                    }
+                }else if (holenumber == 4 && moleAppear4){
+                    moleAppear4 = false;
+                    hole4.setImageResource(R.drawable.hole);
+                    if (lastMoleWhacked) {
+                        if (gamepaused == 0) {
+                            streak = 0;
+                            lastMoleWhacked = false;
+                            streakCounter = findViewById(R.id.StreakValue);
+                            streakCounter.setText(String.valueOf(streak));
+                            playSounds(3);
+                            mInterval = 5000;
+                            if(life > 0){
+                                life = life - 1;
+                                UpdateLife(life);
+                            }
+                            if(life == 0){
+                                Log.d("logtag", "GAME OVER!");
+                            }
+                        }
+                    }
+                }else if (holenumber == 5 && moleAppear5){
+                    moleAppear5 = false;
+                    hole5.setImageResource(R.drawable.hole);
+                    if (lastMoleWhacked) {
+                        if (gamepaused == 0) {
+                            streak = 0;
+                            lastMoleWhacked = false;
+                            streakCounter = findViewById(R.id.StreakValue);
+                            streakCounter.setText(String.valueOf(streak));
+                            playSounds(3);
+                            mInterval = 5000;
+                            if(life > 0){
+                                life = life - 1;
+                                UpdateLife(life);
+                            }
+                            if(life == 0){
+                                Log.d("logtag", "GAME OVER!");
+                            }
+                        }
                     }
                 }
-            }else if (num == 2 && moleAppear2){
-                moleAppear2 = false;
-                hole2.setImageResource(R.drawable.hole);
-                if (gamepaused == 0) {
-                    streak = 0;
-                    lastMoleWhacked = false;
-                    streakCounter = findViewById(R.id.StreakValue);
-                    streakCounter.setText(String.valueOf(streak));
-                    playSounds(3);
-                    mInterval = 5000;
-                }
-            }else if (num == 3 && moleAppear3){
-                moleAppear3 = false;
-                hole3.setImageResource(R.drawable.hole);
-                if (gamepaused == 0) {
-                    streak = 0;
-                    lastMoleWhacked = false;
-                    streakCounter = findViewById(R.id.StreakValue);
-                    streakCounter.setText(String.valueOf(streak));
-                    playSounds(3);
-                    mInterval = 5000;
-                }
-            }else if (num == 4 && moleAppear4){
-                moleAppear4 = false;
-                hole4.setImageResource(R.drawable.hole);
-                if (gamepaused == 0) {
-                    streak = 0;
-                    lastMoleWhacked = false;
-                    streakCounter = findViewById(R.id.StreakValue);
-                    streakCounter.setText(String.valueOf(streak));
-                    playSounds(3);
-                    mInterval = 5000;
-                }
-            }else if (num == 5 && moleAppear5){
-                moleAppear5 = false;
-                hole5.setImageResource(R.drawable.hole);
-                if (gamepaused == 0) {
-                    streak = 0;
-                    lastMoleWhacked = false;
-                    streakCounter = findViewById(R.id.StreakValue);
-                    streakCounter.setText(String.valueOf(streak));
-                    playSounds(3);
-                    mInterval = 5000;
-                }
-            }
-            molespawned = false;
-            molespeed = 1000 - (streak * 5);
-            if (molespeed < 100){
-                molespeed = 100;
-            }else {
+                molespawned = false;
                 molespeed = 1000 - (streak * 5);
+                if (molespeed < 100){
+                    molespeed = 100;
+                }else {
+                    molespeed = 1000 - (streak * 5);
+                }
             }
         }
     }, molespeed);
@@ -333,6 +434,11 @@ public void noMole(final int holenumber) {
 
     @SuppressLint("ClickableViewAccessibility")
     public void setButtons(){
+
+        heart1 = findViewById(R.id.Life1);
+        heart2 = findViewById(R.id.Life2);
+        heart3 = findViewById(R.id.Life3);
+
         hole1 = findViewById(R.id.molehole1);
         hole1.setOnTouchListener(this);
 
@@ -356,17 +462,20 @@ public void noMole(final int holenumber) {
             @Override
             public void onClick(View view) {
                 if (gamepaused == 0){
+                    clearMoles();
                     gamepaused = 1;
                     stopRepeatingTask();
                     pausething.setVisibility(View.VISIBLE);
                     pausedbutton.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_media_play, null));
                     Log.d("logtag", "PAUSED!");
+                    Log.d("logtag", "Spawn Interval : " + mInterval);
                 } else if (gamepaused == 1){
                     gamepaused = 0;
                     startRepeatingTask();
                     pausething.setVisibility(View.INVISIBLE);
                     pausedbutton.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_media_pause, null));
                     Log.d("logtag", "UNPAUSED!");
+                    Log.d("logtag", "Spawn Interval : " + mInterval);
                 }
             }
         });
@@ -396,7 +505,7 @@ public void noMole(final int holenumber) {
     }
 
     public void moleAppearSound(){
-        sp.play(moleHere, 3,3,0,0,1);
+        sp.play(moleHere, 1,1,0,0,1);
     }
 
 
@@ -423,6 +532,7 @@ public void noMole(final int holenumber) {
         super.onPause();{
             stopRepeatingTask();
             if (debounce != 1 && backedout == 0){
+                clearMoles();
                 mPlayer.pause();
                 gamepaused = 1;
                 pausething.setVisibility(View.VISIBLE);
