@@ -2,8 +2,14 @@ package com.example.marcosmith.whacamole;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -15,6 +21,12 @@ public class EndActivity extends AppCompatActivity {
 
     public TextView finalscore, finalstreak;
     private ImageButton returnbutton;
+
+    private SoundPool sp;
+    private AudioAttributes AA;
+    private MediaPlayer mPlayer;
+
+    public int gameover;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -28,6 +40,8 @@ public class EndActivity extends AppCompatActivity {
         finalscore.setText("Score: " + String.valueOf(endingScore));
         finalstreak.setText("Streak: " + String.valueOf(endingStreak));
 
+        loadsound();
+
         returnbutton = findViewById(R.id.backToHome);
         returnbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,4 +52,23 @@ public class EndActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void loadsound(){
+        final  int MAX_VOLUME = 100;
+        final float volume = (float) (1 - (Math.log(MAX_VOLUME - 50) / Math.log(MAX_VOLUME)));
+        mPlayer = MediaPlayer.create(this, R.raw.gameover);
+        mPlayer.setVolume(volume, volume);
+        mPlayer.start();
+        Log.d("logtag", "Gameover!");
+    }
+
+/*    @Override
+    protected void onDestroy() {
+        super.onDestroy();{
+            sp.release();
+            sp = null;
+            mPlayer.stop();
+            mPlayer.release();
+        }
+    }*/
 }
