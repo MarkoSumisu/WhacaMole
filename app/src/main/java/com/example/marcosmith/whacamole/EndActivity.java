@@ -11,7 +11,7 @@ import android.widget.TextView;
 public class EndActivity extends AppCompatActivity {
 
     public int endingScore = MainActivity.points;
-    public int endingStreak = MainActivity.streak;
+    public int endingStreak = MainActivity.finalstreak;
 
     public TextView finalscore, finalstreak;
     private ImageButton returnbutton;

@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public static int savepoint = 0;
     public static int savestreak = 0;
+    public static int finalstreak = 0;
     public int life = 3;
 
     public static int debounce = 0;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private SoundPool sp;
     private AudioAttributes AA;
     private int mInterval = 3000;
-    private int molespeed;
+    private int molespeed = 1000;
     private Handler mHandler;
 
     //sound variables//
@@ -47,8 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public static String stringStreakSaved = "0";
     public static String stringPointsSaved = "0";
 
-    public long last_mole;
-    public int result;
+    public long last_pause;
 
     private ImageButton hole1;
     private ImageButton hole2;
@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         streak = 0;
         savepoint = 0;
         savestreak = 0;
+        finalstreak = 0;
+        mInterval = 3000;
+        molespeed = 1000;
 
         load = getSharedPreferences("userdata", 0);
         String mString = load.getString("HighScore", "0");
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             try {
                 if (!molespawned){
                     long runTime = System.currentTimeMillis();
-                    if(runTime >= (last_mole + mInterval)) { //multiply by 1000 to get milliseconds
+                    if(runTime >= (last_pause + (mInterval))) { //multiply by 1000 to get milliseconds
                         testhole();
                         Log.d("logtag", "Mole Spawned!");
                     }
@@ -215,7 +218,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @SuppressLint("SetTextI18n")
     public void givePoints(int ptns){
         streak = streak + 1;
-        mInterval = mInterval - (streak * 50);
+        finalstreak = finalstreak + 1;
+        if (mInterval>500){
+            mInterval = mInterval - (streak * 10);
+        }else if (mInterval < 500){
+            mInterval = 500;
+        }
+        if (molespeed < 800){
+            molespeed = 800;
+        }else if (molespeed > 800){
+            molespeed = molespeed - (streak * 5);
+        }
         streakCounter = findViewById(R.id.StreakValue);
         streakCounter.setText(String.valueOf(streak));
         lastMoleWhacked = true;
@@ -237,8 +250,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 public void testhole() {
     Random rnd = new Random();
     chooseHole = rnd.nextInt(5);
-    last_mole = System.currentTimeMillis();
+    if (mInterval < 500){
+        mInterval = 500;
+    }
     Log.d("logtag", "Spawn Interval : " + mInterval);
+    Log.d("logtag", "Despawn Interval : " + molespeed);
     if (chooseHole == 0 && !molespawned){
         moleAppearSound();
         moleAppear1 = true;
@@ -307,7 +323,7 @@ public void UpdateLife(int health){
             heart1.setVisibility(View.INVISIBLE);
             heart2.setVisibility(View.INVISIBLE);
             heart3.setVisibility(View.INVISIBLE);
-
+            backedout = 1;
             Intent homeIntent = new Intent(MainActivity.this,EndActivity.class);
             startActivity(homeIntent);
             finish();
@@ -326,12 +342,13 @@ public void noMole(final int holenumber) {
                     hole1.setImageResource(R.drawable.hole);
                     if (lastMoleWhacked) {
                         if (gamepaused == 0) {
+                            finalstreak = streak;
                             streak = 0;
                             lastMoleWhacked = false;
                             streakCounter = findViewById(R.id.StreakValue);
                             streakCounter.setText(String.valueOf(streak));
                             playSounds(3);
-                            mInterval = 5000;
+                            mInterval = 3000;
                             if(life > 0){
                                 life = life - 1;
                                 UpdateLife(life);
@@ -346,12 +363,13 @@ public void noMole(final int holenumber) {
                     hole2.setImageResource(R.drawable.hole);
                     if (lastMoleWhacked) {
                         if (gamepaused == 0) {
+                            finalstreak = streak;
                             streak = 0;
                             lastMoleWhacked = false;
                             streakCounter = findViewById(R.id.StreakValue);
                             streakCounter.setText(String.valueOf(streak));
                             playSounds(3);
-                            mInterval = 5000;
+                            mInterval = 3000;
                             if(life > 0){
                                 life = life - 1;
                                 UpdateLife(life);
@@ -366,12 +384,13 @@ public void noMole(final int holenumber) {
                     hole3.setImageResource(R.drawable.hole);
                     if (lastMoleWhacked) {
                         if (gamepaused == 0) {
+                            finalstreak = streak;
                             streak = 0;
                             lastMoleWhacked = false;
                             streakCounter = findViewById(R.id.StreakValue);
                             streakCounter.setText(String.valueOf(streak));
                             playSounds(3);
-                            mInterval = 5000;
+                            mInterval = 3000;
                             if(life > 0){
                                 life = life - 1;
                                 UpdateLife(life);
@@ -386,12 +405,13 @@ public void noMole(final int holenumber) {
                     hole4.setImageResource(R.drawable.hole);
                     if (lastMoleWhacked) {
                         if (gamepaused == 0) {
+                            finalstreak = streak;
                             streak = 0;
                             lastMoleWhacked = false;
                             streakCounter = findViewById(R.id.StreakValue);
                             streakCounter.setText(String.valueOf(streak));
                             playSounds(3);
-                            mInterval = 5000;
+                            mInterval = 3000;
                             if(life > 0){
                                 life = life - 1;
                                 UpdateLife(life);
@@ -406,12 +426,13 @@ public void noMole(final int holenumber) {
                     hole5.setImageResource(R.drawable.hole);
                     if (lastMoleWhacked) {
                         if (gamepaused == 0) {
+                            finalstreak = streak;
                             streak = 0;
                             lastMoleWhacked = false;
                             streakCounter = findViewById(R.id.StreakValue);
                             streakCounter.setText(String.valueOf(streak));
                             playSounds(3);
-                            mInterval = 5000;
+                            mInterval = 3000;
                             if(life > 0){
                                 life = life - 1;
                                 UpdateLife(life);
@@ -423,12 +444,6 @@ public void noMole(final int holenumber) {
                     }
                 }
                 molespawned = false;
-                molespeed = 1000 - (streak * 5);
-                if (molespeed < 100){
-                    molespeed = 100;
-                }else {
-                    molespeed = 1000 - (streak * 5);
-                }
             }
         }
     }, molespeed);
@@ -473,6 +488,7 @@ public void noMole(final int holenumber) {
                     Log.d("logtag", "PAUSED!");
                     Log.d("logtag", "Spawn Interval : " + mInterval);
                 } else if (gamepaused == 1){
+                    last_pause = System.currentTimeMillis();
                     gamepaused = 0;
                     startRepeatingTask();
                     pausething.setVisibility(View.INVISIBLE);
