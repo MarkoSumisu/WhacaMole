@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public int moleHere;
     public int missMole;
     public int streakfail;
+    public int gamestart;
 
     public static String stringStreakSaved = "0";
     public static String stringPointsSaved = "0";
@@ -74,12 +75,18 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public static SharedPreferences load;
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loadSounds();
+        setButtons();
+
         pausething = findViewById(R.id.textView6);
+        pausething.setVisibility(View.VISIBLE);
+        pausething.setText("GAME START!");
 
         debounce = 0;
         points = 0;
@@ -104,12 +111,23 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         Log.d("logtag", "MainActivity onCreate: " + stringPointsSaved);
 
-        loadSounds();
-        setButtons();
         mHandler = new Handler();
+
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                playSounds(5);
+                //playSounds(4);
+                pausething.setVisibility(View.INVISIBLE);
+                pausething.setText("PAUSED!");
+            }
+        }, 1000);
+
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                pausething.setVisibility(View.INVISIBLE);
                 startRepeatingTask();
             }
         }, 3000);
@@ -264,8 +282,8 @@ public void testhole() {
     if (mInterval < 500){
         mInterval = 500;
     }
-    Log.d("logtag", "Spawn Interval : " + mInterval);
-    Log.d("logtag", "Despawn Interval : " + molespeed);
+/*    Log.d("logtag", "Spawn Interval : " + mInterval);
+    Log.d("logtag", "Despawn Interval : " + molespeed);*/
     if (chooseHole == 0 && !molespawned){
         moleAppearSound();
         moleAppear1 = true;
@@ -528,6 +546,7 @@ public void noMole(final int holenumber) {
         missMole = sp.load(this, R.raw.mole_swing,1);
         moleHere = sp.load(this, R.raw.mole_boop,1);
         streakfail = sp.load(this, R.raw.streak_ended,1);
+        gamestart = sp.load(this, R.raw.startgame, 1);
 
         playSounds(4);
     }
@@ -552,6 +571,8 @@ public void noMole(final int holenumber) {
             mPlayer.start();
             mPlayer.setLooping(true);
             Log.d("logtag", "BG Music Started!");
+        } else if(soundnumber == 5){
+            sp.play(gamestart, 1,1,0,0,1);
         }
     }
 
