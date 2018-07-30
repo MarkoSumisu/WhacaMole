@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public int gamepaused;
     private boolean moleAppear1 = false, moleAppear2 = false, moleAppear3 = false, moleAppear4 = false, moleAppear5 = false;
     private boolean molespawned = false;
+    public boolean lifetook;
     private int chooseHole = 0;
     private Handler handler;
     private MediaPlayer mPlayer;
@@ -155,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 }
             } finally {
                 mHandler.postDelayed(mStatusChecker, mInterval);
-                noMole(1);
+                //noMole(1);
             }
         }
     };
@@ -180,6 +181,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     hole1.setImageResource(R.drawable.hole);
                 }else if (!moleAppear1) {
                     playSounds(2);
+                    finalstreak = streak;
+                    streak = 0;
+                    lastMoleWhacked = false;
+                    streakCounter = findViewById(R.id.StreakValue);
+                    streakCounter.setText(String.valueOf(streak));
+                    playSounds(3);
+                    mInterval = 3000;
+                    if(life > 0){
+                        life = life - 1;
+                        UpdateLife(life);
+                    }
+                    if(life == 0){
+                        UpdateLife(life);
+                    }
                 }
             } else if (id == R.id.molehole2) {
                 if (moleAppear2){
@@ -189,6 +204,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     hole2.setImageResource(R.drawable.hole);
                 }else if(!moleAppear2) {
                     playSounds(2);
+                    finalstreak = streak;
+                    streak = 0;
+                    lastMoleWhacked = false;
+                    streakCounter = findViewById(R.id.StreakValue);
+                    streakCounter.setText(String.valueOf(streak));
+                    playSounds(3);
+                    mInterval = 3000;
+                    if(life > 0){
+                        life = life - 1;
+                        UpdateLife(life);
+                    }
+                    if(life == 0){
+                        UpdateLife(life);
+                    }
                 }
             } else if (id == R.id.molehole3) {
                 if (moleAppear3){
@@ -198,6 +227,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     hole3.setImageResource(R.drawable.hole);
                 }else if (!moleAppear3){
                     playSounds(2);
+                    finalstreak = streak;
+                    streak = 0;
+                    lastMoleWhacked = false;
+                    streakCounter = findViewById(R.id.StreakValue);
+                    streakCounter.setText(String.valueOf(streak));
+                    playSounds(3);
+                    mInterval = 3000;
+                    if(life > 0){
+                        life = life - 1;
+                        UpdateLife(life);
+                    }
+                    if(life == 0){
+                        UpdateLife(life);
+                    }
                 }
 
             } else if (id == R.id.molehole4){
@@ -208,6 +251,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     hole4.setImageResource(R.drawable.hole);
                 }else if (!moleAppear4){
                     playSounds(2);
+                    finalstreak = streak;
+                    streak = 0;
+                    lastMoleWhacked = false;
+                    streakCounter = findViewById(R.id.StreakValue);
+                    streakCounter.setText(String.valueOf(streak));
+                    playSounds(3);
+                    mInterval = 3000;
+                    if(life > 0){
+                        life = life - 1;
+                        UpdateLife(life);
+                    }
+                    if(life == 0){
+                        UpdateLife(life);
+                    }
                 }
 
             } else if (id == R.id.molehole5){
@@ -218,6 +275,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     hole5.setImageResource(R.drawable.hole);
                 }else if (!moleAppear5){
                     playSounds(2);
+                    finalstreak = streak;
+                    streak = 0;
+                    lastMoleWhacked = false;
+                    streakCounter = findViewById(R.id.StreakValue);
+                    streakCounter.setText(String.valueOf(streak));
+                    playSounds(3);
+                    mInterval = 3000;
+                    if(life > 0){
+                        life = life - 1;
+                        UpdateLife(life);
+                    }
+                    if(life == 0){
+                        UpdateLife(life);
+                    }
                 }
 
             } else if (id == R.id.imageButton){
@@ -279,9 +350,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 public void testhole() {
     Random rnd = new Random();
     chooseHole = rnd.nextInt(5);
-    if (mInterval < 500){
+    Log.d("logtag", "Test Hole Fired!");
+/*    if (mInterval < 500){
         mInterval = 500;
-    }
+    }*/
 /*    Log.d("logtag", "Spawn Interval : " + mInterval);
     Log.d("logtag", "Despawn Interval : " + molespeed);*/
     if (chooseHole == 0 && !molespawned){
@@ -360,6 +432,7 @@ public void UpdateLife(int health){
 
 public void noMole(final int holenumber) {
     handler = new Handler();
+    lifetook = false;
     handler.postDelayed(new Runnable() {
         @SuppressLint("SetTextI18n")
         public void run() {
@@ -369,6 +442,7 @@ public void noMole(final int holenumber) {
                     hole1.setImageResource(R.drawable.hole);
                     if (lastMoleWhacked) {
                         if (gamepaused == 0) {
+                            lifetook = true;
                             finalstreak = streak;
                             streak = 0;
                             lastMoleWhacked = false;
@@ -390,6 +464,7 @@ public void noMole(final int holenumber) {
                     hole2.setImageResource(R.drawable.hole);
                     if (lastMoleWhacked) {
                         if (gamepaused == 0) {
+                            lifetook = true;
                             finalstreak = streak;
                             streak = 0;
                             lastMoleWhacked = false;
@@ -411,6 +486,7 @@ public void noMole(final int holenumber) {
                     hole3.setImageResource(R.drawable.hole);
                     if (lastMoleWhacked) {
                         if (gamepaused == 0) {
+                            lifetook = true;
                             finalstreak = streak;
                             streak = 0;
                             lastMoleWhacked = false;
@@ -432,6 +508,7 @@ public void noMole(final int holenumber) {
                     hole4.setImageResource(R.drawable.hole);
                     if (lastMoleWhacked) {
                         if (gamepaused == 0) {
+                            lifetook = true;
                             finalstreak = streak;
                             streak = 0;
                             lastMoleWhacked = false;
@@ -453,6 +530,7 @@ public void noMole(final int holenumber) {
                     hole5.setImageResource(R.drawable.hole);
                     if (lastMoleWhacked) {
                         if (gamepaused == 0) {
+                            lifetook = true;
                             finalstreak = streak;
                             streak = 0;
                             lastMoleWhacked = false;
@@ -470,9 +548,25 @@ public void noMole(final int holenumber) {
                         }
                     }
                 }
-                molespawned = false;
-                Log.d("logtag", "molespawned: " + molespawned);
             }
+            if (!lastMoleWhacked && !lifetook){
+                finalstreak = streak;
+                streak = 0;
+                lastMoleWhacked = false;
+                streakCounter = findViewById(R.id.StreakValue);
+                streakCounter.setText(String.valueOf(streak));
+                playSounds(3);
+                mInterval = 3000;
+                if(life > 0){
+                    life = life - 1;
+                    UpdateLife(life);
+                }
+                if(life == 0){
+                    UpdateLife(life);
+                }
+            }
+            molespawned = false;
+            Log.d("logtag", "molespawned: " + molespawned);
         }
     }, molespeed);
 }
