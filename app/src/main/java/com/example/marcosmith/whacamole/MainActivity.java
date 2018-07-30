@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private boolean moleAppear1 = false, moleAppear2 = false, moleAppear3 = false, moleAppear4 = false, moleAppear5 = false;
     private boolean molespawned = false;
     public boolean lifetook;
+    public boolean debounce2;
     private int chooseHole = 0;
     private Handler handler;
     private MediaPlayer mPlayer;
@@ -181,19 +182,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     hole1.setImageResource(R.drawable.hole);
                 }else if (!moleAppear1) {
                     playSounds(2);
-                    finalstreak = streak;
-                    streak = 0;
-                    lastMoleWhacked = false;
-                    streakCounter = findViewById(R.id.StreakValue);
-                    streakCounter.setText(String.valueOf(streak));
-                    playSounds(3);
-                    mInterval = 3000;
-                    if(life > 0){
-                        life = life - 1;
-                        UpdateLife(life);
-                    }
-                    if(life == 0){
-                        UpdateLife(life);
+                    if (molespawned && debounce2){
+                        debounce2 = false;
+                        finalstreak = streak;
+                        streak = 0;
+                        lastMoleWhacked = false;
+                        streakCounter = findViewById(R.id.StreakValue);
+                        streakCounter.setText(String.valueOf(streak));
+                        playSounds(3);
+                        mInterval = 3000;
+                        if(life > 0){
+                            life = life - 1;
+                            UpdateLife(life);
+                        }
+                        if(life == 0){
+                            UpdateLife(life);
+                        }
                     }
                 }
             } else if (id == R.id.molehole2) {
@@ -204,19 +208,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     hole2.setImageResource(R.drawable.hole);
                 }else if(!moleAppear2) {
                     playSounds(2);
-                    finalstreak = streak;
-                    streak = 0;
-                    lastMoleWhacked = false;
-                    streakCounter = findViewById(R.id.StreakValue);
-                    streakCounter.setText(String.valueOf(streak));
-                    playSounds(3);
-                    mInterval = 3000;
-                    if(life > 0){
-                        life = life - 1;
-                        UpdateLife(life);
-                    }
-                    if(life == 0){
-                        UpdateLife(life);
+                    if (molespawned && debounce2){
+                        debounce2 = false;
+                        finalstreak = streak;
+                        streak = 0;
+                        lastMoleWhacked = false;
+                        streakCounter = findViewById(R.id.StreakValue);
+                        streakCounter.setText(String.valueOf(streak));
+                        playSounds(3);
+                        mInterval = 3000;
+                        if(life > 0){
+                            life = life - 1;
+                            UpdateLife(life);
+                        }
+                        if(life == 0){
+                            UpdateLife(life);
+                        }
                     }
                 }
             } else if (id == R.id.molehole3) {
@@ -227,19 +234,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     hole3.setImageResource(R.drawable.hole);
                 }else if (!moleAppear3){
                     playSounds(2);
-                    finalstreak = streak;
-                    streak = 0;
-                    lastMoleWhacked = false;
-                    streakCounter = findViewById(R.id.StreakValue);
-                    streakCounter.setText(String.valueOf(streak));
-                    playSounds(3);
-                    mInterval = 3000;
-                    if(life > 0){
-                        life = life - 1;
-                        UpdateLife(life);
-                    }
-                    if(life == 0){
-                        UpdateLife(life);
+                    if (molespawned && debounce2){
+                        debounce2 = false;
+                        finalstreak = streak;
+                        streak = 0;
+                        lastMoleWhacked = false;
+                        streakCounter = findViewById(R.id.StreakValue);
+                        streakCounter.setText(String.valueOf(streak));
+                        playSounds(3);
+                        mInterval = 3000;
+                        if(life > 0){
+                            life = life - 1;
+                            UpdateLife(life);
+                        }
+                        if(life == 0){
+                            UpdateLife(life);
+                        }
                     }
                 }
 
@@ -251,19 +261,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     hole4.setImageResource(R.drawable.hole);
                 }else if (!moleAppear4){
                     playSounds(2);
-                    finalstreak = streak;
-                    streak = 0;
-                    lastMoleWhacked = false;
-                    streakCounter = findViewById(R.id.StreakValue);
-                    streakCounter.setText(String.valueOf(streak));
-                    playSounds(3);
-                    mInterval = 3000;
-                    if(life > 0){
-                        life = life - 1;
-                        UpdateLife(life);
-                    }
-                    if(life == 0){
-                        UpdateLife(life);
+                    if (molespawned && debounce2){
+                        debounce2 = false;
+                        finalstreak = streak;
+                        streak = 0;
+                        lastMoleWhacked = false;
+                        streakCounter = findViewById(R.id.StreakValue);
+                        streakCounter.setText(String.valueOf(streak));
+                        playSounds(3);
+                        mInterval = 3000;
+                        if(life > 0){
+                            life = life - 1;
+                            UpdateLife(life);
+                        }
+                        if(life == 0){
+                            UpdateLife(life);
+                        }
                     }
                 }
 
@@ -275,19 +288,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     hole5.setImageResource(R.drawable.hole);
                 }else if (!moleAppear5){
                     playSounds(2);
-                    finalstreak = streak;
-                    streak = 0;
-                    lastMoleWhacked = false;
-                    streakCounter = findViewById(R.id.StreakValue);
-                    streakCounter.setText(String.valueOf(streak));
-                    playSounds(3);
-                    mInterval = 3000;
-                    if(life > 0){
-                        life = life - 1;
-                        UpdateLife(life);
-                    }
-                    if(life == 0){
-                        UpdateLife(life);
+                    if (molespawned && debounce2){
+                        debounce2 = false;
+                        finalstreak = streak;
+                        streak = 0;
+                        lastMoleWhacked = false;
+                        streakCounter = findViewById(R.id.StreakValue);
+                        streakCounter.setText(String.valueOf(streak));
+                        playSounds(3);
+                        mInterval = 3000;
+                        if(life > 0){
+                            life = life - 1;
+                            UpdateLife(life);
+                        }
+                        if(life == 0){
+                            UpdateLife(life);
+                        }
                     }
                 }
 
@@ -351,6 +367,7 @@ public void testhole() {
     Random rnd = new Random();
     chooseHole = rnd.nextInt(5);
     Log.d("logtag", "Test Hole Fired!");
+    debounce2 = true;
 /*    if (mInterval < 500){
         mInterval = 500;
     }*/
@@ -549,7 +566,8 @@ public void noMole(final int holenumber) {
                     }
                 }
             }
-            if (!lastMoleWhacked && !lifetook){
+            if (!lastMoleWhacked && !lifetook && debounce2){
+                debounce2 = false;
                 finalstreak = streak;
                 streak = 0;
                 lastMoleWhacked = false;
