@@ -52,6 +52,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        //android.os.Process.killProcess(android.os.Process.myPid());
+        moveTaskToBack(true);
+        //HomeActivity.this.finish();
+    }
 
     @Override
     protected void onDestroy() {

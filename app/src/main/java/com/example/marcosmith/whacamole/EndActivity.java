@@ -3,10 +3,8 @@ package com.example.marcosmith.whacamole;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.media.AudioAttributes;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -46,9 +44,16 @@ public class EndActivity extends AppCompatActivity {
         returnbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent homeIntent = new Intent(EndActivity.this,HomeActivity.class);
-                startActivity(homeIntent);
+                mPlayer.stop();
+                mPlayer.release();
+                Intent intent = new Intent(EndActivity.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                //Intent homeIntent = new Intent(EndActivity.this,HomeActivity.class);
+                //startActivity(homeIntent);
                 finish();
+                //android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
     }
@@ -60,6 +65,20 @@ public class EndActivity extends AppCompatActivity {
         mPlayer.setVolume(volume, volume);
         mPlayer.start();
         Log.d("logtag", "Gameover!");
+    }
+
+    @Override
+    public void onBackPressed() {
+        mPlayer.stop();
+        mPlayer.release();
+        Intent intent = new Intent(EndActivity.this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        //Intent homeIntent = new Intent(EndActivity.this,HomeActivity.class);
+        //startActivity(homeIntent);
+        finish();
+        //android.os.Process.killProcess(android.os.Process.myPid());
     }
 
 /*    @Override

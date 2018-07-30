@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private AudioAttributes AA;
     private int mInterval = 3000;
     private int molespeed = 1000;
+    public boolean startGame = false;
     private Handler mHandler;
 
     //sound variables//
@@ -106,7 +107,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         loadSounds();
         setButtons();
         mHandler = new Handler();
-        startRepeatingTask();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startRepeatingTask();
+            }
+        }, 3000);
+        //startRepeatingTask();
     }
 
     Runnable mStatusChecker = new Runnable() {
@@ -115,7 +122,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             try {
                 if (!molespawned){
                     long runTime = System.currentTimeMillis();
-                    if(runTime >= (last_pause + (mInterval))) { //multiply by 1000 to get milliseconds
+                    if (startGame = false){
+                        Log.d("logtag", "Game not Started!");
+                        return;
+                    }
+                    if(runTime >= (last_pause + (mInterval))) {
                         testhole();
                         Log.d("logtag", "Mole Spawned!");
                     }
@@ -208,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     Intent homeIntent = new Intent(MainActivity.this,HomeActivity.class);
                     startActivity(homeIntent);
-                    finish();
+                    MainActivity.this.finish();
                 }
             }
         }
@@ -219,11 +230,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public void givePoints(int ptns){
         streak = streak + 1;
         finalstreak = finalstreak + 1;
-        if (mInterval>500){
+/*        if (mInterval>500){
             mInterval = mInterval - (streak * 10);
         }else if (mInterval < 500){
             mInterval = 500;
-        }
+        }*/
         if (molespeed < 800){
             molespeed = 800;
         }else if (molespeed > 800){
@@ -286,7 +297,6 @@ public void testhole() {
         noMole(5);
         molespawned = true;
     }
-    //Log.d("logtag", "(Test Hole) Last Mole Hit: " + String.valueOf(lastMoleWhacked));
 }
 
 public void clearMoles(){
@@ -326,12 +336,11 @@ public void UpdateLife(int health){
             backedout = 1;
             Intent homeIntent = new Intent(MainActivity.this,EndActivity.class);
             startActivity(homeIntent);
-            finish();
+            MainActivity.this.finish();
         }
 }
 
 public void noMole(final int holenumber) {
-   // Log.d("logtag", "(No Mole) Last Mole Hit: " + String.valueOf(lastMoleWhacked));
     handler = new Handler();
     handler.postDelayed(new Runnable() {
         @SuppressLint("SetTextI18n")
@@ -444,10 +453,10 @@ public void noMole(final int holenumber) {
                     }
                 }
                 molespawned = false;
+                Log.d("logtag", "molespawned: " + molespawned);
             }
         }
     }, molespeed);
-
 }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -591,7 +600,7 @@ public void noMole(final int holenumber) {
         }
         Intent homeIntent = new Intent(MainActivity.this,HomeActivity.class);
         startActivity(homeIntent);
-        finish();
+        MainActivity.this.finish();
     }
 
     @Override
@@ -612,6 +621,7 @@ public void noMole(final int holenumber) {
                 SharedPreferences.Editor save = load.edit();
                 save.putString("HighScore", stringPointsSaved).apply();
             }
+            MainActivity.this.finish();
         }
     }
 

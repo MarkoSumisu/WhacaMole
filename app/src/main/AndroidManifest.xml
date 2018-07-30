@@ -22,7 +22,8 @@
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".EndActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:noHistory="true">
         </activity>
     </application>
 
