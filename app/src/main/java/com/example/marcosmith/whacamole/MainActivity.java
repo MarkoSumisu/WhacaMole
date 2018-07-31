@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public boolean lifetook;
     public boolean debounce2;
     private int chooseHole = 0;
+    private int heartmole = 0;
+    public boolean getheart = false;
     private Handler handler;
     private MediaPlayer mPlayer;
     public Boolean soundIsPlaying;
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         loadSounds();
         setButtons();
-        //FullScreencall();
+        FullScreencall();
 
         pausething = findViewById(R.id.textView6);
         pausething.setVisibility(View.VISIBLE);
@@ -193,6 +195,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     givePoints(1);
                     moleAppear1 = false;
                     hole1.setImageResource(R.drawable.hole);
+                    if (getheart){
+                        if (life < 3) {
+                            life = life + 1;
+                        }
+                        getheart = false;
+                        UpdateLife(life);
+                    }
                 }else if (!moleAppear1) {
                     playSounds(2);
                     if (molespawned && debounce2){
@@ -219,6 +228,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     givePoints(1);
                     moleAppear2 = false;
                     hole2.setImageResource(R.drawable.hole);
+                    if (getheart){
+                        if (life < 3) {
+                            life = life + 1;
+                        }
+                        getheart = false;
+                        UpdateLife(life);
+                    }
                 }else if(!moleAppear2) {
                     playSounds(2);
                     if (molespawned && debounce2){
@@ -245,6 +261,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     givePoints(1);
                     moleAppear3 = false;
                     hole3.setImageResource(R.drawable.hole);
+                    if (getheart){
+                        if (life < 3) {
+                            life = life + 1;
+                        }
+                        getheart = false;
+                        UpdateLife(life);
+                    }
                 }else if (!moleAppear3){
                     playSounds(2);
                     if (molespawned && debounce2){
@@ -272,6 +295,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     givePoints(1);
                     moleAppear4 = false;
                     hole4.setImageResource(R.drawable.hole);
+                    if (getheart){
+                        if (life < 3) {
+                            life = life + 1;
+                        }
+                        getheart = false;
+                        UpdateLife(life);
+                    }
                 }else if (!moleAppear4){
                     playSounds(2);
                     if (molespawned && debounce2){
@@ -324,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (debounce == 0) {
                     debounce = 1;
                     Log.d("logtag", "if ID is imagebutton: " + stringPointsSaved);
-
+                    stopRepeatingTask();
                     if (streak>savestreak){
                         stringStreakSaved = String.valueOf(streak);
                         SharedPreferences.Editor savestreak = load.edit();
@@ -348,11 +378,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public void givePoints(int ptns){
         streak = streak + 1;
         finalstreak = finalstreak + 1;
-/*        if (mInterval>500){
-            mInterval = mInterval - (streak * 10);
-        }else if (mInterval < 500){
-            mInterval = 500;
-        }*/
+
         if (molespeed < 800){
             molespeed = 800;
         }else if (molespeed > 800){
@@ -379,41 +405,59 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 public void testhole() {
     Random rnd = new Random();
     chooseHole = rnd.nextInt(5);
+    heartmole = rnd.nextInt((12/life));
+
     Log.d("logtag", "Test Hole Fired!");
     debounce2 = true;
-/*    if (mInterval < 500){
-        mInterval = 500;
-    }*/
-/*    Log.d("logtag", "Spawn Interval : " + mInterval);
-    Log.d("logtag", "Despawn Interval : " + molespeed);*/
+
     if (chooseHole == 0 && !molespawned){
         moleAppearSound();
         moleAppear1 = true;
         hole1.setImageResource(R.drawable.mole);
+        if (heartmole == 1){
+            getheart = true;
+            hole1.setImageResource(R.drawable.heartmole);
+        }
         noMole(1);
         molespawned = true;
     } else if (chooseHole == 1 && !molespawned){
         moleAppearSound();
         moleAppear2 = true;
         hole2.setImageResource(R.drawable.mole);
+        if (heartmole == 1){
+            getheart = true;
+            hole2.setImageResource(R.drawable.heartmole);
+        }
         noMole(2);
         molespawned = true;
     } else if(chooseHole == 2 && !molespawned){
         moleAppearSound();
         moleAppear3= true;
         hole3.setImageResource(R.drawable.mole);
+        if (heartmole == 1){
+            getheart = true;
+            hole3.setImageResource(R.drawable.heartmole);
+        }
         noMole(3);
         molespawned = true;
     }else if (chooseHole == 3 && !molespawned){
         moleAppearSound();
         moleAppear4 = true;
         hole4.setImageResource(R.drawable.mole);
+        if (heartmole == 1){
+            getheart = true;
+            hole4.setImageResource(R.drawable.heartmole);
+        }
         noMole(4);
         molespawned = true;
     }else if (chooseHole == 4 && !molespawned){
         moleAppearSound();
         moleAppear5 = true;
         hole5.setImageResource(R.drawable.mole);
+        if (heartmole == 1){
+            getheart = true;
+            hole5.setImageResource(R.drawable.heartmole);
+        }
         noMole(5);
         molespawned = true;
     }
@@ -437,6 +481,9 @@ public void clearMoles(){
 }
 
 public void UpdateLife(int health){
+        if (debounce == 1 || backedout == 1){
+            return;
+        }
         if (health == 3){
             heart1.setVisibility(View.VISIBLE);
             heart2.setVisibility(View.VISIBLE);
