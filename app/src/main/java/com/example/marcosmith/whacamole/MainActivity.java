@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public int missMole;
     public int streakfail;
     public int gamestart;
+    public int lifeheal;
 
     public static String stringStreakSaved = "0";
     public static String stringPointsSaved = "0";
@@ -200,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                             life = life + 1;
                         }
                         getheart = false;
+                        playSounds(6);
                         UpdateLife(life);
                     }
                 }else if (!moleAppear1) {
@@ -233,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                             life = life + 1;
                         }
                         getheart = false;
+                        playSounds(6);
                         UpdateLife(life);
                     }
                 }else if(!moleAppear2) {
@@ -266,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                             life = life + 1;
                         }
                         getheart = false;
+                        playSounds(6);
                         UpdateLife(life);
                     }
                 }else if (!moleAppear3){
@@ -300,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                             life = life + 1;
                         }
                         getheart = false;
+                        playSounds(6);
                         UpdateLife(life);
                     }
                 }else if (!moleAppear4){
@@ -329,6 +334,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     givePoints(1);
                     moleAppear5 = false;
                     hole5.setImageResource(R.drawable.hole);
+                    if (getheart){
+                        if (life < 3) {
+                            life = life + 1;
+                        }
+                        getheart = false;
+                        playSounds(6);
+                        UpdateLife(life);
+                    }
                 }else if (!moleAppear5){
                     playSounds(2);
                     if (molespawned && debounce2){
@@ -719,6 +732,7 @@ public void noMole(final int holenumber) {
         moleHere = sp.load(this, R.raw.mole_boop,1);
         streakfail = sp.load(this, R.raw.streak_ended,1);
         gamestart = sp.load(this, R.raw.startgame, 1);
+        lifeheal = sp.load(this, R.raw.heal, 1);
 
         playSounds(4);
     }
@@ -745,6 +759,8 @@ public void noMole(final int holenumber) {
             Log.d("logtag", "BG Music Started!");
         } else if(soundnumber == 5){
             sp.play(gamestart, 1,1,0,0,1);
+        } else if(soundnumber == 6){
+            sp.play(lifeheal, 1,1,0,0,1);
         }
     }
 
