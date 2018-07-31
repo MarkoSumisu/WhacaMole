@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         loadSounds();
         setButtons();
-        FullScreencall();
+        //FullScreencall();
 
         pausething = findViewById(R.id.textView6);
         pausething.setVisibility(View.VISIBLE);
@@ -719,6 +719,7 @@ public void noMole(final int holenumber) {
     @Override
     protected void onResume() {
         super.onResume();{
+            FullScreencall();
             soundIsPlaying = mPlayer.isPlaying();
             Log.d("logtag", String.valueOf(soundIsPlaying));
             if(!soundIsPlaying){

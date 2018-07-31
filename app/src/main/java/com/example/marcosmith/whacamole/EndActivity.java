@@ -33,7 +33,7 @@ public class EndActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end);
 
-        FullScreencall();
+        //FullScreencall();
 
         finalscore = findViewById(R.id.endingScore);
         finalstreak = findViewById(R.id.endingStreak);
@@ -53,10 +53,7 @@ public class EndActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                //Intent homeIntent = new Intent(EndActivity.this,HomeActivity.class);
-                //startActivity(homeIntent);
                 finish();
-                //android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
     }
@@ -83,6 +80,13 @@ public class EndActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();{
+            FullScreencall();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         mPlayer.stop();
         mPlayer.release();
@@ -90,19 +94,6 @@ public class EndActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        //Intent homeIntent = new Intent(EndActivity.this,HomeActivity.class);
-        //startActivity(homeIntent);
         finish();
-        //android.os.Process.killProcess(android.os.Process.myPid());
     }
-
-/*    @Override
-    protected void onDestroy() {
-        super.onDestroy();{
-            sp.release();
-            sp = null;
-            mPlayer.stop();
-            mPlayer.release();
-        }
-    }*/
 }
