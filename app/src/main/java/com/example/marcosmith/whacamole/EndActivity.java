@@ -82,7 +82,7 @@ public class EndActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();{
-            FullScreencall();
+            //FullScreencall();
         }
     }
 
