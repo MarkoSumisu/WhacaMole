@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 startRepeatingTask();
             }
         }, 3000);
-        //startRepeatingTask();
     }
 
     Runnable mStatusChecker = new Runnable() {
@@ -146,10 +145,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             try {
                 if (!molespawned){
                     long runTime = System.currentTimeMillis();
-                    if (startGame = false){
+/*                    if (startGame = false){
                         Log.d("logtag", "Game not Started!");
                         return;
-                    }
+                    }*/
                     if(runTime >= (last_pause + (mInterval))) {
                         testhole();
                         Log.d("logtag", "Mole Spawned!");
@@ -161,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 }
             } finally {
                 mHandler.postDelayed(mStatusChecker, mInterval);
-                //noMole(1);
             }
         }
     };
@@ -179,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             View v = this.getWindow().getDecorView();
             v.setSystemUiVisibility(View.GONE);
         } else if(Build.VERSION.SDK_INT >= 19) {
-            //for new api versions.
             View decorView = getWindow().getDecorView();
             int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             decorView.setSystemUiVisibility(uiOptions);
@@ -392,9 +389,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         streak = streak + 1;
         finalstreak = finalstreak + 1;
 
-        if (molespeed < 800){
-            molespeed = 800;
-        }else if (molespeed > 800){
+        if (mInterval < 1000){
+            mInterval = 1000;
+        }else if (mInterval > 1000){
+            mInterval = mInterval - (streak * 20);
+        }
+
+        if (molespeed < 500){
+            molespeed = 500;
+        }else if (molespeed > 500){
             molespeed = molespeed - (streak * 5);
         }
         streakCounter = findViewById(R.id.StreakValue);
@@ -418,9 +421,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 public void testhole() {
     Random rnd = new Random();
     chooseHole = rnd.nextInt(5);
-    heartmole = rnd.nextInt((12/life));
+    heartmole = rnd.nextInt((60/life));
 
-    Log.d("logtag", "Test Hole Fired!");
     debounce2 = true;
 
     if (chooseHole == 0 && !molespawned){
@@ -491,6 +493,8 @@ public void clearMoles(){
 
     moleAppear5 = false;
     hole5.setImageResource(R.drawable.hole);
+
+    getheart = false;
 }
 
 public void UpdateLife(int health){
@@ -540,6 +544,7 @@ public void noMole(final int holenumber) {
                             streakCounter.setText(String.valueOf(streak));
                             playSounds(3);
                             mInterval = 3000;
+                            molespeed = 1000;
                             if(life > 0){
                                 life = life - 1;
                                 UpdateLife(life);
@@ -562,6 +567,7 @@ public void noMole(final int holenumber) {
                             streakCounter.setText(String.valueOf(streak));
                             playSounds(3);
                             mInterval = 3000;
+                            molespeed = 1000;
                             if(life > 0){
                                 life = life - 1;
                                 UpdateLife(life);
@@ -584,6 +590,7 @@ public void noMole(final int holenumber) {
                             streakCounter.setText(String.valueOf(streak));
                             playSounds(3);
                             mInterval = 3000;
+                            molespeed = 1000;
                             if(life > 0){
                                 life = life - 1;
                                 UpdateLife(life);
@@ -606,6 +613,7 @@ public void noMole(final int holenumber) {
                             streakCounter.setText(String.valueOf(streak));
                             playSounds(3);
                             mInterval = 3000;
+                            molespeed = 1000;
                             if(life > 0){
                                 life = life - 1;
                                 UpdateLife(life);
@@ -628,6 +636,7 @@ public void noMole(final int holenumber) {
                             streakCounter.setText(String.valueOf(streak));
                             playSounds(3);
                             mInterval = 3000;
+                            molespeed = 1000;
                             if(life > 0){
                                 life = life - 1;
                                 UpdateLife(life);
@@ -639,25 +648,29 @@ public void noMole(final int holenumber) {
                     }
                 }
             }
-            if (!lastMoleWhacked && !lifetook && debounce2){
-                debounce2 = false;
-                finalstreak = streak;
-                streak = 0;
-                lastMoleWhacked = false;
-                streakCounter = findViewById(R.id.StreakValue);
-                streakCounter.setText(String.valueOf(streak));
-                playSounds(3);
-                mInterval = 3000;
-                if(life > 0){
-                    life = life - 1;
-                    UpdateLife(life);
+            if (gamepaused == 0){
+                if (!lastMoleWhacked && !lifetook && debounce2){
+                    Log.d("logtag", "Missed Mole");
+                    debounce2 = false;
+                    finalstreak = streak;
+                    streak = 0;
+                    lastMoleWhacked = false;
+                    streakCounter = findViewById(R.id.StreakValue);
+                    streakCounter.setText(String.valueOf(streak));
+                    playSounds(3);
+                    mInterval = 3000;
+                    molespeed = 1000;
+                    if(life > 0){
+                        life = life - 1;
+                        UpdateLife(life);
+                    }
+                    if(life == 0){
+                        UpdateLife(life);
+                    }
                 }
-                if(life == 0){
-                    UpdateLife(life);
-                }
+                getheart = false;
             }
             molespawned = false;
-            Log.d("logtag", "molespawned: " + molespawned);
         }
     }, molespeed);
 }
@@ -698,7 +711,6 @@ public void noMole(final int holenumber) {
                     pausething.setVisibility(View.VISIBLE);
                     pausedbutton.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_media_play, null));
                     Log.d("logtag", "PAUSED!");
-                    Log.d("logtag", "Spawn Interval : " + mInterval);
                 } else if (gamepaused == 1){
                     last_pause = System.currentTimeMillis();
                     gamepaused = 0;
@@ -706,7 +718,6 @@ public void noMole(final int holenumber) {
                     pausething.setVisibility(View.INVISIBLE);
                     pausedbutton.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_media_pause, null));
                     Log.d("logtag", "UNPAUSED!");
-                    Log.d("logtag", "Spawn Interval : " + mInterval);
                 }
             }
         });
